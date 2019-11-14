@@ -1,0 +1,91 @@
+.data
+
+textcard1: .asciiz "\nCARD ONE\n"
+textcard2: .asciiz "\nCARD TWO\n"
+textcard3: .asciiz "\nCARD THREE\n "
+textcard4: .asciiz "\nCARD FOUR\n "
+textcard5: .asciiz "\nCARD FIVE\n "
+textcard6: .asciiz "\nCARD SIX\n "
+prompt: .asciiz "\nYES OR NO?"
+input: .space 20
+yes: .asciiz "y"
+number1: .word 1
+space: .asciiz " "
+value: .word 0
+value1: .word 1
+value2: .word 2
+value3: .word 4
+
+.text
+
+start :
+j card1
+
+card1: 
+li $v0,4
+la $a0,textcard1 #it will print prompt
+syscall
+
+add $t0, $t0, 1
+
+while: 
+	bgt $t0, 63, continue
+	li $v0,1
+	move $a0, $t0
+	syscall
+	addi $t0, $t0, 2
+	li $v0, 4
+	la $a0, space
+	syscall
+	j while
+continue:
+li $v0, 4
+la $a0, prompt
+syscall
+li $v0, 8 #get input
+la $a0, input #
+li $a1, 20
+move $t5, $a0
+syscall
+lb $t6, yes
+lb $t5, 0($t5)
+
+#if yes, store the value of card1 as 2^0 to a variable
+#if not, move to the next card without storing the 2^0
+bne $t0, $t1, continue2
+add $t3, $t3, $zero
+add $t3, $zero, 1
+j card2
+
+continue2:
+j card2
+card2:
+li $v0,4
+la $a0,textcard2 #it will print prompt
+syscall
+lw $t3, value2($zero)
+while2:
+	bgt $t3, 63, continue3
+	li $v0, 1
+	move $a0, $t3
+	syscall
+	li $v0, 4
+	la $a0, space
+	syscall
+	addi $t3, $t3, 1
+	li $v0, 1
+	move $a0, $t3
+	syscall
+	li $v0, 4
+	la $a0, space
+	syscall
+	addi $t3, $t3, 3
+	j while2
+	
+continue3:
+
+
+exit:
+li $v0, 10
+syscall 
+

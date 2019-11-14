@@ -1,0 +1,139 @@
+.data
+
+textcard1: .asciiz "\nCARD ONE\n"
+textcard2: .asciiz "\nCARD TWO\n"
+textcard3: .asciiz "\nCARD THREE\n"
+textcard4: .asciiz "\nCARD FOUR\n"
+textcard5: .asciiz "\nCARD FIVE\n"
+textcard6: .asciiz "\nCARD SIX\n"
+prompt: .asciiz "\nYES OR NO?"
+input: .space 20
+yes: .asciiz "y"
+number1: .word 1
+space: .asciiz " "
+value: .word 0
+value1: .word 1
+value2: .word 2
+value3: .word 4
+.text
+
+
+
+start: 
+li $v0,4
+la $a0,textcard2 #it will print prompt
+lw $t3, value1($zero)
+lw $t4, value($zero)
+sll $t3, $t3, 1
+syscall
+while2:
+	bgt $t3, 63, card3
+	bne $t4, 2, increment2
+	addi $t3, $t3, 2
+	lw $t4, value($zero)
+	j while2
+	increment2:
+	addi $t4, $t4, 1
+	li $v0, 1
+	move $a0, $t3
+	syscall
+	li $v0, 4
+	la $a0, space
+	syscall
+	addi $t3, $t3, 1
+	j while2
+card3:
+li $v0, 4
+la $a0, textcard3
+syscall
+lw $t3, value1($zero)
+lw $t4, value($zero)
+sll $t3, $t3, 2
+while3:
+	bgt $t3, 63, card4
+	bne $t4, 4, increment3
+	addi $t3, $t3, 4
+	lw $t4, value($zero)
+	j while3
+	increment3:
+	addi $t4, $t4, 1
+	li $v0, 1
+	move $a0, $t3
+	syscall
+	li $v0, 4
+	la $a0, space
+	syscall
+	addi $t3,$t3, 1
+	j while3
+	
+card4:
+li $v0, 4
+la $a0, textcard4
+syscall
+lw $t3, value1($zero)
+lw $t4, value($zero)
+sll $t3, $t3, 3
+while4:
+	bgt $t3, 63, card5
+	bne $t4, 8, increment4
+	addi $t3, $t3, 8
+	lw $t4, value($zero)
+	j while4
+	increment4:
+	addi $t4, $t4, 1
+	li $v0, 1
+	move $a0, $t3
+	syscall
+	li $v0, 4
+	la $a0, space
+	syscall
+	addi $t3,$t3, 1
+	j while4
+card5:
+li $v0, 4
+la $a0, textcard5
+syscall
+lw $t3, value1($zero)
+lw $t4, value($zero)
+sll $t3, $t3, 4
+while5:
+	bgt $t3, 63, card6
+	bne $t4, 16, increment5
+	addi $t3, $t3, 16
+	increment5:
+	addi $t4, $t4, 1 
+	li $v0, 1
+	move $a0, $t3
+	syscall
+	li $v0, 4
+	la $a0, space
+	syscall
+	addi $t3, $t3, 1
+	j while5
+	
+card6:
+li $v0, 4
+la $a0, textcard6
+syscall 
+lw $t3, value1($zero)
+lw $t4, value($zero)
+sll $t3, $t3, 5
+while6:
+	bgt $t3, 63, exit
+	bne $t4, 32, increment6
+	increment6:
+	addi $t4, $t4, 1
+	li $v0, 1
+	move $a0, $t3
+	syscall 
+	li $v0, 4
+	la $a0, space
+	syscall
+	addi $t3, $t3, 1
+	j while6
+	
+	
+
+exit:
+li $v0, 10
+syscall
